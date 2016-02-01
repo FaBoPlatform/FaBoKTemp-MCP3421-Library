@@ -1,16 +1,16 @@
-# FaBo3Axis-ADXL345-Library
+# FaBoKTemp-MCP3421-Library
 
-# FaBo3Axis
+# FaBoKTemp
 
-This is a library for FaBo 3Aixs Brick.
+This is a library for FaBo Ktemp Brick.
 
-# ADXL345
+# MCP3421
 
-ADXL345 is 3axis sensor.
+MCP3421 is temperature sensor.
 
 # Datasheet
 
-[ADXL345 Datasheet](http://www.analog.com/media/en/technical-documentation/data-sheets/ADXL345.PDF)
+[MCP3421 Datasheet](http://ww1.microchip.com/downloads/jp/DeviceDoc/22003E_JP.pdf)
 
 # Releases
 
