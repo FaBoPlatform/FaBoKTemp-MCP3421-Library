@@ -1,30 +1,30 @@
 #include "fabo-mcp3421.h"
 
-bool mcp3421::searchDevice()
+bool FaBoKTemp::searchDevice()
 {
-    
+
   byte device[5];
   readI2c(0x00, 5, device);
- 
+
   if((device[1] & 0xf0) == MCP3421_DEVICE){
-      return true;
+    return true;
   } else{
-      return false;
+    return false;
   }
   
 }
 
-void mcp3421::configuration()
+void FaBoKTemp::configuration()
 {
-   byte conf = MCP3421_CONFIG_RDY_ON;
-   conf |= MCP3421_CONFIG_CONV_CONTINUOUS;
-   conf |= MCP3421_CONFIG_RATE_240SPS;
-   conf |= MCP3421_CONFIG_GAIN_X8;
-   
-   writeI2c(MCP3421_CONFIG_REG, conf);
+ byte conf = MCP3421_CONFIG_RDY_ON;
+ conf |= MCP3421_CONFIG_CONV_CONTINUOUS;
+ conf |= MCP3421_CONFIG_RATE_240SPS;
+ conf |= MCP3421_CONFIG_GAIN_X8;
+
+ writeI2c(MCP3421_CONFIG_REG, conf);
 }
 
-double mcp3421::readTemperature()
+double FaBoKTemp::readTemperature()
 {
   double data;
   double temp;
@@ -33,19 +33,19 @@ double mcp3421::readTemperature()
 
   byte buffer[5];
   readI2c(0x00, 5, buffer);
- 
+
   
   data = (buffer[2] << 16) + (buffer[3] << 8) + buffer[4];
   
 
-   temp = (data *1000/mvuv + cp) / 40.7;
+  temp = (data *1000/mvuv + cp) / 40.7;
   
-    return temp;
+  return temp;
   
 }
 
 // I2Cへの書き込み
-void mcp3421::writeI2c(byte register_addr, byte value) {
+void FaBoKTemp::writeI2c(byte register_addr, byte value) {
   Wire.begin();       // I2Cの開始
   Wire.beginTransmission(MCP3421_SLAVE_ADDRESS);  
   Wire.write(register_addr);         
@@ -54,7 +54,7 @@ void mcp3421::writeI2c(byte register_addr, byte value) {
 }
 
 // I2Cへの読み込み
-void mcp3421::readI2c(byte register_addr, int num, byte buffer[]) {
+void FaBoKTemp::readI2c(byte register_addr, int num, byte buffer[]) {
   Wire.begin();       // I2Cの開始
   Wire.beginTransmission(MCP3421_SLAVE_ADDRESS); 
   Wire.write(register_addr);           
@@ -71,5 +71,3 @@ void mcp3421::readI2c(byte register_addr, int num, byte buffer[]) {
   }
   Wire.endTransmission();         
 }
-
-mcp3421 faboKTemp;

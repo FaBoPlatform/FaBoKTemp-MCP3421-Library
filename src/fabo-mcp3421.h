@@ -21,7 +21,7 @@
 
 #define MCP3421_DEVICE 0xD0
 
-class mcp3421
+class FaBoKTemp
 {
 public:
   bool searchDevice(void);
@@ -36,5 +36,3 @@ private:
   void readI2c(byte register_addr, int num, byte *buf);
   void writeI2c(byte register_addr, byte value);
 };
-
-extern mcp3421 faboKTemp;

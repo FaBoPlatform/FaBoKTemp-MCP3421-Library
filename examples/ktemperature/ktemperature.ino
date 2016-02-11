@@ -1,6 +1,8 @@
 #include "fabo-mcp3421.h"
 #include "Wire.h"
 
+FaBoKTemp faboKTemp;
+
 void setup() {
   Serial.begin(9600);
   Serial.println("Init...");
