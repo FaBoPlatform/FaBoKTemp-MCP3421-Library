@@ -8,9 +8,6 @@ void setup() {
   Serial.println("Init...");
   
   faboKTemp.configuration();
-  if(faboKTemp.searchDevice()){
-    Serial.println("I am MCP3421");
-  }
 }
 
 void loop() {
@@ -18,4 +15,5 @@ void loop() {
   double temp = faboKTemp.readTemperature();
   Serial.print("Temp: ");
   Serial.println(temp);
+  delay(500);
 }

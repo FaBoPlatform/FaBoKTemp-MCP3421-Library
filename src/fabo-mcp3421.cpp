@@ -1,73 +1,74 @@
+/**
+ * @file  fabo-mcp3421.cpp
+ * @brief fabo libtary of mcp3421
+ * @author Akira Sasaki
+ * @date 2,10, 2016
+ */
 #include "fabo-mcp3421.h"
 
-bool FaBoKTemp::searchDevice()
-{
-
-  byte device[5];
-  readI2c(0x00, 5, device);
-
-  if((device[1] & 0xf0) == MCP3421_DEVICE){
-    return true;
-  } else{
-    return false;
-  }
-  
-}
-
+/**
+ * @brief Set Config
+ */
 void FaBoKTemp::configuration()
 {
  byte conf = MCP3421_CONFIG_RDY_ON;
  conf |= MCP3421_CONFIG_CONV_CONTINUOUS;
- conf |= MCP3421_CONFIG_RATE_240SPS;
+ conf |= MCP3421_CONFIG_RATE_3_75SPS;
  conf |= MCP3421_CONFIG_GAIN_X8;
 
- writeI2c(MCP3421_CONFIG_REG, conf);
+ writeI2c(conf);
 }
 
+/**
+ * @brief Read MCP3421
+ * @return double : Temprature Data
+ */
 double FaBoKTemp::readTemperature()
 {
-  double data;
+  int32_t data;
   double temp;
-  int mvuv = 1 << (3+2*3);
-  int cp = 407; 
+  uint16_t mvuv = 1 << (3+2*3);
+  int cp = 407;
+  byte sign = 0x00;
+  byte buffer[4];
+  readI2c(4, buffer);
 
-  byte buffer[5];
-  readI2c(0x00, 5, buffer);
+  sign = buffer[0] & 0x80 ? 0xff : 0;
+  data = (sign << 24) + (buffer[0] << 16) + (buffer[1] << 8) + buffer[2];
+  temp = (((double)data * 1000 )/mvuv + cp) / 40.7;
 
-  
-  data = (buffer[2] << 16) + (buffer[3] << 8) + buffer[4];
-  
-
-  temp = (data *1000/mvuv + cp) / 40.7;
-  
   return temp;
-  
 }
 
-// I2Cへの書き込み
-void FaBoKTemp::writeI2c(byte register_addr, byte value) {
-  Wire.begin();       // I2Cの開始
-  Wire.beginTransmission(MCP3421_SLAVE_ADDRESS);  
-  Wire.write(register_addr);         
-  Wire.write(value);                 
-  Wire.endTransmission();        
+/**
+ * @brief Write I2C Data
+ * @param [in] value  : Write Data
+ */
+void FaBoKTemp::writeI2c(byte value) {
+  Wire.begin();
+  Wire.beginTransmission(MCP3421_SLAVE_ADDRESS);
+  Wire.write(value);
+  Wire.endTransmission();
 }
 
-// I2Cへの読み込み
-void FaBoKTemp::readI2c(byte register_addr, int num, byte buffer[]) {
-  Wire.begin();       // I2Cの開始
-  Wire.beginTransmission(MCP3421_SLAVE_ADDRESS); 
-  Wire.write(register_addr);           
-  Wire.endTransmission();         
+/**
+ * @brief Read I2C Data
+ * @param [in] num   : Data Length
+ * @param [out] *buf : Read Data
+ */
+void FaBoKTemp::readI2c(int num, byte buffer[]) {
+  Wire.begin();
+  Wire.beginTransmission(MCP3421_SLAVE_ADDRESS);
+  Wire.endTransmission();
 
-  Wire.beginTransmission(MCP3421_SLAVE_ADDRESS); 
-  Wire.requestFrom(MCP3421_SLAVE_ADDRESS, num);   
+  Wire.beginTransmission(MCP3421_SLAVE_ADDRESS);
+  Wire.requestFrom(MCP3421_SLAVE_ADDRESS, num);
 
   int i = 0;
-  while(Wire.available())        
-  { 
-    buffer[i] = Wire.read();   
+  while(Wire.available())
+  {
+    buffer[i] = Wire.read();
     i++;
   }
-  Wire.endTransmission();         
+  Wire.endTransmission();
 }
