@@ -1,21 +1,23 @@
 # FaBoKTemp-MCP3421-Library
 
-# FaBoKTemp
+This is a library for FaBo #209 KTemp I2C Brick.
 
-This is a library for FaBo Ktemp Brick.
+## FaBo KTemp I2C Brick
 
-# MCP3421
+[#209 KTemp I2C Brick](http://fabo.io/209.html)
 
-MCP3421 is temperature sensor.
+## MCP3421
 
-# Datasheet
+MCP3421 is 18-Bit Analog-to-Digital Converter.
+
+### MCP3421 Datasheet
 
 [MCP3421 Datasheet](http://ww1.microchip.com/downloads/jp/DeviceDoc/22003E_JP.pdf)
 
-# Releases
+## Releases
 
-1.0.0 Initial release.
+- 1.0.0 Initial release.
 
-# How to install.
+## How to install
 
-[Installing Additional Arduino Libraries](https://www.arduino.cc/en/Guide/Libraries#toc3)
+[Installing Additional Arduino Libraries](https://www.arduino.cc/en/Guide/Libraries)
